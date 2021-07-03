@@ -8,20 +8,20 @@ namespace ServiceForWorkingWithBooks.Tests.Moq
     internal class BookListServiceMoqTests
     {
 
-        private Mock<IStorage<IDictionary<string, Book.Book>>> storageMock;
+        private Mock<IStorage<Book.Book>> storageMock;
         private Mock<IBookPredicate> predicateMock;
 
         [OneTimeSetUp]
         public void SetUp()
         {
-            this.storageMock = new Mock<IStorage<IDictionary<string, Book.Book>>>();
+            this.storageMock = new Mock<IStorage<Book.Book>>();
             this.predicateMock = new Mock<IBookPredicate>();
         }
 
         [Test]
         public void BehaviorTest_LoadFromStorageOnce()
         {
-            this.storageMock.Setup(storage => storage.Load()).Returns(() => new Dictionary<string, Book.Book>());
+            this.storageMock.Setup(storage => storage.Load()).Returns(() => new List<Book.Book>());
 
             var storage = this.storageMock.Object;
             var service = new BookListService(storage);
@@ -32,7 +32,7 @@ namespace ServiceForWorkingWithBooks.Tests.Moq
         [Test]
         public void StateTest_LoadFromStorageSaveDictionary()
         {
-            this.storageMock.Setup(storage => storage.Load()).Returns(() => new Dictionary<string, Book.Book>() { ["9971502100"] = new Book.Book("test", "test", "test", "9971502100") });
+            this.storageMock.Setup(storage => storage.Load()).Returns(() => new List<Book.Book> { new Book.Book("test", "test", "test", "9971502100") });
             predicateMock.Setup(predicate => predicate.Verify(It.IsAny<Book.Book>())).Returns((Book.Book book) => book.ISBN == "9971502100");
 
             var storage = this.storageMock.Object;
@@ -45,15 +45,15 @@ namespace ServiceForWorkingWithBooks.Tests.Moq
         [Test]
         public void BehaviorTest_SaveToStorageOnce()
         {
-            this.storageMock.Setup(storage => storage.Load()).Returns(() => new Dictionary<string, Book.Book>());
-            this.storageMock.Setup(storage => storage.Save(It.IsAny<Dictionary<string, Book.Book>>()));
+            this.storageMock.Setup(storage => storage.Load()).Returns(() => new List<Book.Book>());
+            this.storageMock.Setup(storage => storage.Save(It.IsAny<IEnumerable<Book.Book>>()));
 
             var storage = this.storageMock.Object;
             var service = new BookListService(storage);
 
             service.Save();
 
-            storageMock.Verify(storage => storage.Save(new Dictionary<string, Book.Book>()), Times.Once);
+            storageMock.Verify(storage => storage.Save(It.IsAny<IEnumerable<Book.Book>>()), Times.Once);
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace ServiceForWorkingWithBooks.Tests.Moq
             service.Save();
 
             //Assert
-            Assert.IsTrue(storage.books.ContainsKey(book.ISBN));
+            Assert.IsTrue(storage.books.Contains(book));
         }
 
         [Test]
@@ -85,14 +85,14 @@ namespace ServiceForWorkingWithBooks.Tests.Moq
             service.Save();
 
             //Assert
-            Assert.IsTrue(storage.books.ContainsKey(book.ISBN));
+            Assert.IsTrue(storage.books.Contains(book));
 
             // Act
             service.Remove(book);
             service.Save();
 
             //Assert
-            Assert.IsFalse(storage.books.ContainsKey(book.ISBN));
+            Assert.IsFalse(storage.books.Contains(book));
         }
 
         [Test]

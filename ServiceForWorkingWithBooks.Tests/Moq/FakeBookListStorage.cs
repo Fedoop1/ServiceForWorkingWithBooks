@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace ServiceForWorkingWithBooks.Tests.Moq
 {
-    public class FakeBookListStorage : IStorage<IDictionary<string, Book.Book>>
+    public class FakeBookListStorage : IStorage<Book.Book>
     {
-        public FakeBookListStorage(Dictionary<string, Book.Book> books) => this.books = books;
+        public IEnumerable<Book.Book> books;
+        public FakeBookListStorage(IEnumerable<Book.Book> books) => this.books = books;
 
-        public FakeBookListStorage() { }
+        public FakeBookListStorage() { this.books = new List<Book.Book>(); }
 
-        public IDictionary<string, Book.Book> books = new Dictionary<string, Book.Book>();
+        public IEnumerable<Book.Book> Load() => this.books;
 
-        public IDictionary<string, Book.Book> Load() => this.books;
-
-        public void Save(IDictionary<string, Book.Book> data) => this.books = data;
+        public void Save(IEnumerable<Book.Book> data) => this.books = data;
     }
 }
