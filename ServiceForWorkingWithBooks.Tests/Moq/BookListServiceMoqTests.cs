@@ -108,17 +108,12 @@ namespace ServiceForWorkingWithBooks.Tests.Moq
 
             var source = new Book.Book[] 
             { 
-                new Book.Book("test", "test1", "test", "11111111111"), 
-                new Book.Book("test", "test2", "test", "22222222222"), 
-                new Book.Book("test", "test3", "test", "33333333333"), 
+                new Book.Book("test", "test1", "test", "9992158107"), 
+                new Book.Book("test", "test2", "test", "0943396042"), 
+                new Book.Book("test", "test3", "test", "097522980X"), 
             };
 
-            var expected = new Book.Book[]
-            {
-                new Book.Book("test", "test3", "test", "33333333333"),
-                new Book.Book("test", "test2", "test", "22222222222"),
-                new Book.Book("test", "test1", "test", "11111111111"),
-            };
+            var expected = source.Reverse();
 
             // Act
             for (int index = 0; index < source.Length; index++)

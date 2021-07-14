@@ -80,7 +80,10 @@ namespace ServiceForWorkingWithBooks
         /// <param name="bookPredicate">The book predicate.</param>
         /// <returns>Sequence of books which match predicate.</returns>
         /// <exception cref="ArgumentNullException">Throws when predicate is null.</exception>
-        public IReadOnlyCollection<Book.Book> FindByTag(IBookPredicate bookPredicate)
+        public IReadOnlyCollection<Book.Book> FindByTag(IBookPredicate bookPredicate) => bookPredicate is null ? throw new ArgumentNullException(nameof(bookPredicate), "Book predicate is null") 
+            : this.FindByTag(new Predicate<Book.Book>(bookPredicate.Verify));
+
+        public IReadOnlyCollection<Book.Book> FindByTag(Predicate<Book.Book> bookPredicate)
         {
             if (bookPredicate is null)
             {
@@ -91,7 +94,7 @@ namespace ServiceForWorkingWithBooks
 
             foreach (var book in this.bookSet)
             {
-                if (bookPredicate.Verify(book))
+                if (bookPredicate(book))
                 {
                     result.Add(book);
                 }

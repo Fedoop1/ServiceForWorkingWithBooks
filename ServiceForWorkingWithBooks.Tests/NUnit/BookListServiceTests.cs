@@ -13,7 +13,7 @@ namespace ServiceForWorkingWithBooks.Tests
         public void SortBy_NullComparer_ThrowArgumentNullException() => Assert.Throws<ArgumentNullException>(() => new BookListService().SortBy(null), "Book comparer is null");
 
         [Test]
-        public void FindBy_NullPredicate_ThrowArgumentNullException() => Assert.Throws<ArgumentNullException>(() => new BookListService().FindByTag(null), "Book predicate is null");
+        public void FindBy_NullPredicate_ThrowArgumentNullException() => Assert.Throws<ArgumentNullException>(() => new BookListService().FindByTag((IBookPredicate)null), "Book predicate is null");
 
         [Test]
         public void Remove_NullBook_ThrowArgumentNullException() => Assert.Throws<ArgumentNullException>(() => new BookListService().Remove(null), "Book is null");

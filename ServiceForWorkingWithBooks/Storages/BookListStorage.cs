@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ServiceForWorkingWithBooks
 {
     /// <summary>
-    /// Class "storage" which contain some condition of <see cref="BookListService"/> instance.
+    /// Class "storage" that contain some condition of <see cref="BookListService"/> instance.
     /// </summary>
     public class BookListStorage : IStorage<Book.Book>
     {
